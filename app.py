@@ -20,7 +20,7 @@ from dotenv import load_dotenv,find_dotenv
 
 load_dotenv(find_dotenv())
 
-lyzr_api_key = os.getenv("LYZR_API_KEY", "lyzr-JGixJayFOAYHw4A3PMf99pSg")
+lyzr_api_key = os.getenv("LYZR_API_KEY", "")
 openai_api_key = os.getenv("OPENAI_API_KEY", "")
 serper_api_key = os.getenv("SERPER_API_KEY","")
 
@@ -69,7 +69,7 @@ environment = client.create_environment_endpoint(json_body=environment_config)
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 
 st.title("Lyzr Advyzr")
-st.write("Personalized Investment Portfolio Advisor using Lyzr's API.")
+st.write("Personalized Investment Portfolio Advisor using Lyzr.")
 open_ai_text_completion_model = OpenAIModel(
     api_key=openai_api_key,
     parameters={
