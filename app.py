@@ -20,7 +20,7 @@ from dotenv import load_dotenv,find_dotenv
 
 load_dotenv(find_dotenv())
 
-lyzr_api_key = os.getenv("LYZR_API_KEY", "")
+lyzr_api_key = os.getenv("LYZR_API_KEY", "lyzr-JGixJayFOAYHw4A3PMf99pSg")
 openai_api_key = os.getenv("OPENAI_API_KEY", "")
 serper_api_key = os.getenv("SERPER_API_KEY","")
 
