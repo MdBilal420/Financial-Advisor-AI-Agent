@@ -2,12 +2,6 @@
 import os
 import streamlit as st
 
-
-from lyzr_agent_api.client import AgentAPI
-from lyzr_agent_api.models.environment import EnvironmentConfig, FeatureConfig
-from lyzr_agent_api.models.agents import AgentConfig
-from lyzr_agent_api.models.chat import ChatRequest
-
 from lyzr_automata import Agent,Task
 from lyzr_automata.pipelines.linear_sync_pipeline import LinearSyncPipeline
 from lyzr_automata.ai_models.openai import OpenAIModel
@@ -25,31 +19,7 @@ lyzr_api_key = os.getenv("LYZR_API_KEY", "")
 openai_api_key = os.getenv("OPENAI_API_KEY", "")
 serper_api_key = os.getenv("SERPER_API_KEY","")
 
-client = AgentAPI(x_api_key=lyzr_api_key)
 
-environment_config = EnvironmentConfig(
-    name="Test Environment",
-    features=[
-        FeatureConfig(
-            type="SHORT_TERM_MEMORY",
-            config={},          
-            priority=0,
-        )
-    ],
-    tools=[],
-    llm_config={
-        "provider": "openai",
-        "model": "gpt-4o-mini",
-        "config": {
-            "temperature": 0.5,
-            "top_p": 0.9,
-        },
-        "env":{
-                "OPENAI_API_KEY": openai_api_key
-            }},
-)
-
-environment = client.create_environment_endpoint(json_body=environment_config)
 
 st.set_page_config(
     page_title = "Lyzr Advyzr"
@@ -63,11 +33,11 @@ os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 
 st.title("Lyzr Advyzr")
 st.write("Personalized Investment Portfolio Advisor using Lyzr's API.")
-open_ai_text_completion_model = OpenAIModel(
+open_ai_text_model = OpenAIModel(
     api_key=openai_api_key,
     parameters={
         "model":"gpt-4-turbo-preview",
-        "temperature":0.2,
+        "temperature":0.1,
         "max_tokens":1500
     }
 )
@@ -144,7 +114,7 @@ def extractData(text):
 
         task1 = Task(
             name="stock analysis",
-            model=open_ai_text_completion_model,
+            model=open_ai_text_model,
             agent=analyst_agent,
             instructions=f"""Analyse the list of companies from {truncated_text} along with their some financial details in tabular format. 
             Do not write any extra details just the name on of the companies is enough."""
@@ -159,7 +129,7 @@ def extractData(text):
         ).run()
         return output[0]['task_output']
     except requests.exceptions.RequestException as e:
-        print(f"Error URL not working {url}:{e}")
+        print(f"Error extracting list of companies :{e}")
         return None
 
 
@@ -188,7 +158,7 @@ def fund_allocation(list,riskTolerance,timeline,investment,financial_goal):
 
         task1 = Task(
             name="Wealth investment",
-            model=open_ai_text_completion_model,
+            model=open_ai_text_model,
             agent=analyst_agent,
             instructions=f"""You are an experienced investment advisor specializing in portfolio optimization. 
             Your task is to distribute a given {investment} amount across these {list} of companies based on the following inputs:
