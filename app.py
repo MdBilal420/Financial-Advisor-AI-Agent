@@ -20,9 +20,25 @@ from dotenv import load_dotenv,find_dotenv
 
 load_dotenv(find_dotenv())
 
-lyzr_api_key = os.getenv("LYZR_API_KEY", "")
+lyzr_api_key = os.getenv("LYZR_API_KEY", "lyzr-JGixJayFOAYHw4A3PMf99pSg")
 openai_api_key = os.getenv("OPENAI_API_KEY", "")
 serper_api_key = os.getenv("SERPER_API_KEY","")
+
+
+
+st.set_page_config(
+    page_title = "Lyzr Advyzr"
+)
+
+
+if not openai_api_key:
+    openai_api_key = st.sidebar.text_input("Enter your OpenAI API key:", type="password")
+
+if not lyzr_api_key:
+    lyzr_api_key = st.sidebar.text_input("Enter your Lyzr API key:", type="password")
+
+if not serper_api_key:
+    serper_api_key = st.sidebar.text_input("Enter your Serper API key:", type="password")
 
 client = AgentAPI(x_api_key=lyzr_api_key)
 
@@ -49,14 +65,6 @@ environment_config = EnvironmentConfig(
 )
 
 environment = client.create_environment_endpoint(json_body=environment_config)
-
-st.set_page_config(
-    page_title = "Lyzr Advyzr"
-)
-
-
-if not openai_api_key:
-    openai_api_key = st.sidebar.text_input("Enter your OpenAI API key:", type="password")
 
 os.environ["OPENAI_MODEL_NAME"] = 'gpt-3.5-turbo'
 
