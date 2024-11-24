@@ -1,0 +1,5 @@
+streamlit
+lyzr_agent_api
+lyzr_automata
+BeautifulSoup
+dotenv
