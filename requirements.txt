@@ -3,3 +3,4 @@ streamlit
 # lyzr_automata
 beautifulsoup4
 python-dotenv
+lyzr_agent_api
