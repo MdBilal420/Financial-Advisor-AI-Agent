@@ -186,8 +186,6 @@ def get_investment_amount(income, expenses, savings, debt):
 
 def fund_allocation(list,riskTolerance,timeline,investment,financial_goal):
     try:
-        print("FUND",list,riskTolerance,timeline,investment,financial_goal)
-
         analyst_agent = Agent(
             role="wealth investor",
             prompt_persona=f"""Act like an experienced financial advisor with 20 years of expertise in wealth management, retirement planning, and investment strategies. Your clients range from individuals to small business owners seeking guidance on optimizing their financial health. Provide comprehensive, step-by-step advice that takes into account both {riskTolerance} and {timeline} needs."""
@@ -261,7 +259,6 @@ with col6:
 
 marketTrends = st.button("Get Latest Market Trends")
 if marketTrends:
-    print("D++++",riskTolerance,timeline)
     with st.spinner("Wait, please. Fetching latest trends and opportunities..."):
         query = f"What are the best {timeline} stocks with {riskTolerance} risk currently ?"
         text = researchData(query)
@@ -270,8 +267,9 @@ if(len(list)):
     investment = get_investment_amount(income, expenses, savings, debt)
     if(investment > 0):
         st.success(f'{investment} is the amount that can be invested', icon="✅")
+        with st.spinner("Wait, please. Allocating funds based on your requirements..."):
+            allocation = fund_allocation(list,riskTolerance,timeline,investment,financial_goal)
+            if(allocation):
+                st.markdown(allocation)
     else:
         st.warning('There is no amount left to invest', icon="⚠️")
-    allocation = fund_allocation(list,riskTolerance,timeline,investment,financial_goal)
-    if(allocation):
-        st.markdown(allocation)
